@@ -157,4 +157,8 @@ public class Customer {
         rating.setUserRating(this);
         ratingSet.add(rating);
     }
+    public void addEvent(Event event) {
+        event.setUserEvent(this);
+        eventSet.add(event);
+    }
 }

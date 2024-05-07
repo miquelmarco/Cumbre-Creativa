@@ -18,6 +18,7 @@ public class Event {
     private LocalDate date;
     private LocalTime time;
     private Byte rating;
+    private boolean isActivated;
     @OneToMany(mappedBy = "eventComment", fetch = FetchType.EAGER)
     private Set<Comment> commentSet = new HashSet<>();
     @OneToMany(mappedBy = "eventAssistance", fetch = FetchType.EAGER)
@@ -34,13 +35,14 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String organizer, String description, LocalDate date, LocalTime time, Byte rating) {
+    public Event(String title, String organizer, String description, LocalDate date, LocalTime time, Byte rating, boolean isActivated) {
         this.title = title;
         this.organizer = organizer;
         this.description = description;
         this.date = date;
         this.time = time;
         this.rating = rating;
+        this.isActivated = isActivated;
     }
 
     public Long getId() {
@@ -93,6 +95,14 @@ public class Event {
 
     public void setRating(Byte rating) {
         this.rating = rating;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
     }
 
     public Set<Comment> getCommentSet() {

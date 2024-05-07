@@ -25,10 +25,10 @@ public class CumbrecreativaApplication {
     @Bean
     public CommandLineRunner initData(CustomerRepository customerRepository, EventRepository eventRepository, AssistanceRepository assistanceRepository, CommentRepository commentRepository, LocationRepository locationRepository, RatingRepository ratingRepository) {
         return args -> {
-            Customer testCustomer = new Customer("testUser", "testUser", "testUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.USER, true, "testmail@outlook.com", passwordEncoder.encode("123456"));
+            Customer testCustomer = new Customer("testUser", "testUser", "testUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ADMIN, true, "testmail@outlook.com", passwordEncoder.encode("123456"));
             customerRepository.save(testCustomer);
-            Event testEvent = new Event("testevent", "testOrganizer", "testDescription", LocalDate.now(), LocalTime.now(), (byte) 4);
-            eventRepository.save(testEvent);
+//            Event testEvent = new Event("testevent", "testOrganizer", "testDescription", LocalDate.now(), LocalTime.now(), (byte) 4);
+//            eventRepository.save(testEvent);
             Assistance testAssistance = new Assistance();
             assistanceRepository.save(testAssistance);
             Comment testComment = new Comment("testText", LocalDate.now());

@@ -3,10 +3,12 @@ package cumbrecreativa.cumbrecreativa.controllers;
 import cumbrecreativa.cumbrecreativa.DTOs.CustomerDTO;
 import cumbrecreativa.cumbrecreativa.DTOs.RegisterDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
+import cumbrecreativa.cumbrecreativa.models.Rol;
 import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,15 @@ public class CustomerController {
     public PasswordEncoder passwordEncoder;
     @Autowired
     public CustomerRepository customerRepository;
+
     @GetMapping("/getAllCustomers")
-    private Set<CustomerDTO> getAllCustomers () {
-        return customerRepository.findAll().stream().map(CustomerDTO::new).collect(Collectors.toSet());
+    private ResponseEntity<?> getAllCustomers(Authentication authentication) {
+        Customer customer = customerRepository.findByEmail(authentication.getName());
+        if (customer == null || customer.getRol() != Rol.ADMIN) {
+            return new ResponseEntity<>("Acceso denegado", HttpStatus.FORBIDDEN);
+        }
+        Set<CustomerDTO> customerDTOSet = customerRepository.findAll().stream().map(CustomerDTO::new).collect(Collectors.toSet());
+        return new ResponseEntity<>(customerDTOSet, HttpStatus.OK);
     }
 
     @PostMapping("/register")

@@ -80,4 +80,9 @@ public class Location {
     public void setEventsSet(Set<Event> eventsSet) {
         this.eventsSet = eventsSet;
     }
+    //add methods
+    public void addEvent(Event event) {
+        event.setLocation(this);
+        eventsSet.add(event);
+    }
 }

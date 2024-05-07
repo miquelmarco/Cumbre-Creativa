@@ -14,6 +14,7 @@ public class EventDTO {
     private LocalDate date;
     private LocalTime time;
     private Byte rating;
+    private boolean isActivated;
     private CustomerDTO userEvent;
     private LocationDTO location;
     private Set<CommentDTO> commentSet;
@@ -30,8 +31,9 @@ public class EventDTO {
         date = event.getDate();
         time = event.getTime();
         rating = event.getRating();
+        isActivated = event.isActivated();
         userEvent = new CustomerDTO(event.getUserEvent());
-        location =  new LocationDTO(event.getLocation());
+        location = new LocationDTO(event.getLocation());
         commentSet = event.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
         assistanceSet = event.getAssistanceSet().stream().map(AssistanceDTO::new).collect(Collectors.toSet());
         ratingSet = event.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
@@ -59,6 +61,10 @@ public class EventDTO {
 
     public Byte getRating() {
         return rating;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
     }
 
     public CustomerDTO getUserEvent() {
