@@ -134,4 +134,10 @@ public class Event {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    //add methods
+    public void addRating(Rating rating) {
+        rating.setEventRating(this);
+        ratingSet.add(rating);
+    }
 }

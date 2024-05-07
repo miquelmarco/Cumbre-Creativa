@@ -21,9 +21,11 @@ public class Rating {
     public Rating() {
     }
 
-    public Rating(Byte rating, LocalDate date) {
+    public Rating(Byte rating, LocalDate date, Customer userRating, Event eventRating) {
         this.rating = rating;
         this.date = date;
+        this.userRating = userRating;
+        this.eventRating = eventRating;
     }
 
     public Long getId() {

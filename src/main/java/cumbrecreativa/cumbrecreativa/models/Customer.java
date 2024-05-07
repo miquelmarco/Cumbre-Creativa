@@ -13,7 +13,7 @@ public class Customer {
     private Long id;
     private String name;
     private String lastName;
-    private String username;
+    private String userName;
     private LocalDate birthdate;
     private Gender gender;
     private Rol rol;
@@ -32,10 +32,10 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String lastName, String username, LocalDate birthdate, Gender gender, Rol rol, boolean isActivate, String email, String password) {
+    public Customer(String name, String lastName, String userName, LocalDate birthdate, Gender gender, Rol rol, boolean isActivate, String email, String password) {
         this.name = name;
         this.lastName = lastName;
-        this.username = username;
+        this.userName = userName;
         this.birthdate = birthdate;
         this.gender = gender;
         this.rol = rol;
@@ -64,12 +64,12 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     public LocalDate getBirthdate() {
@@ -150,5 +150,11 @@ public class Customer {
 
     public void setAssistanceSet(Set<Assistance> assistanceSet) {
         this.assistanceSet = assistanceSet;
+    }
+
+    //add methods
+    public void addRating(Rating rating) {
+        rating.setUserRating(this);
+        ratingSet.add(rating);
     }
 }

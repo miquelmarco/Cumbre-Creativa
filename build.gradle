@@ -11,6 +11,10 @@ java {
 	sourceCompatibility = '17'
 }
 
+bootRun {
+	sourceResources sourceSets.main
+}
+
 repositories {
 	mavenCentral()
 }
@@ -21,6 +25,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.2.4'
+
 }
 
 tasks.named('test') {
