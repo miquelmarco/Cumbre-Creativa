@@ -22,7 +22,6 @@ public class Authorization {
                     path.requestMatchers("/**").permitAll()
                             .anyRequest().permitAll();
                 })
-
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::disable))

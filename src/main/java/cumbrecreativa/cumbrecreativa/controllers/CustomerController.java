@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,10 +80,12 @@ public class CustomerController {
         if (registerDTO.getPassword().isBlank()) {
             return new ResponseEntity<>("Debe ingresar contraseña", HttpStatus.FORBIDDEN);
         }
+        String verCode = UUID.randomUUID().toString();
         Customer newCustomer = new Customer(registerDTO.getName(), registerDTO.getLastName(), registerDTO.getUserName(),
-                registerDTO.getBirthdate(), registerDTO.getGender(), registerDTO.getRol(), true, registerDTO.getEmail(),
+                registerDTO.getBirthdate(), registerDTO.getGender(), registerDTO.getRol(), verCode, false, registerDTO.getEmail(),
                 passwordEncoder.encode(registerDTO.getPassword()));
         customerRepository.save(newCustomer);
         return new ResponseEntity<>("Registro completo", HttpStatus.OK);
+
     }
 }

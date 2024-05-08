@@ -18,6 +18,7 @@ public class Customer {
     private Gender gender;
     private Rol rol;
     private boolean isActivate;
+    private String verification;
     private String email;
     private String password;
     @OneToMany(mappedBy = "userEvent", fetch = FetchType.EAGER)
@@ -32,7 +33,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String lastName, String userName, LocalDate birthdate, Gender gender, Rol rol, boolean isActivate, String email, String password) {
+    public Customer(String name, String lastName, String userName, LocalDate birthdate, Gender gender, Rol rol, String verification, boolean isActivate, String email, String password) {
         this.name = name;
         this.lastName = lastName;
         this.userName = userName;
@@ -40,6 +41,7 @@ public class Customer {
         this.gender = gender;
         this.rol = rol;
         this.isActivate = isActivate;
+        this.verification = verification;
         this.email = email;
         this.password = password;
     }
@@ -68,7 +70,7 @@ public class Customer {
         return userName;
     }
 
-    public void setUsername(String username) {
+    public void setUserName(String username) {
         this.userName = username;
     }
 
@@ -98,6 +100,14 @@ public class Customer {
 
     public boolean isActivate() {
         return isActivate;
+    }
+
+    public String getVerification() {
+        return verification;
+    }
+
+    public void setVerification(String verification) {
+        this.verification = verification;
     }
 
     public void setActivate(boolean activate) {
@@ -157,6 +167,7 @@ public class Customer {
         rating.setUserRating(this);
         ratingSet.add(rating);
     }
+
     public void addEvent(Event event) {
         event.setUserEvent(this);
         eventSet.add(event);

@@ -58,10 +58,6 @@ public class EventController {
         if (eCreator.getDate() == null || eCreator.getTime().toString().isBlank()) {
             return new ResponseEntity<>("Debes ingresar una hora de evento", HttpStatus.FORBIDDEN);
         }
-//        Location location = locationRepository.findById(eCreator.getEventId()).orElse(null);
-//        if (location == null) {
-//            return new ResponseEntity<>("Locación de evento incorrecta", HttpStatus.FORBIDDEN);
-//        }
         Optional<Location> optionalLocation = locationRepository.findById(eCreator.getEventId());
         if (optionalLocation.isEmpty()) {
             return new ResponseEntity<>("Locación de evento incorrecta", HttpStatus.FORBIDDEN);

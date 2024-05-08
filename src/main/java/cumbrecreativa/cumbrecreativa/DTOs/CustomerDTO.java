@@ -1,11 +1,8 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
 import cumbrecreativa.cumbrecreativa.models.*;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +15,7 @@ public class CustomerDTO {
     private Rol rol;
     private boolean isActivate;
     private String email;
+    private String verification;
     private Set<EventDTO> eventSet;
     private Set<CommentDTO> commentSet;
     private Set<RatingDTO> ratingSet;
@@ -35,6 +33,7 @@ public class CustomerDTO {
         rol = customer.getRol();
         isActivate = customer.isActivate();
         email = customer.getEmail();
+        this.verification = customer.getVerification();
         eventSet = customer.getEventSet().stream().map(EventDTO::new).collect(Collectors.toSet());
         commentSet = customer.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
         ratingSet = customer.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
@@ -71,6 +70,10 @@ public class CustomerDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getVerification() {
+        return verification;
     }
 
     public Set<EventDTO> getEventSet() {
