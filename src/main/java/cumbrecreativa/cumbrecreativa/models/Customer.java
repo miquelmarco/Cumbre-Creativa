@@ -3,6 +3,7 @@ package cumbrecreativa.cumbrecreativa.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ public class Customer {
     private Rol rol;
     private boolean isActivate;
     private String verification;
+    private String resetPasswordToken;
+    private LocalDateTime resetPasswordExpiration;
     private String email;
     private String password;
     @OneToMany(mappedBy = "userEvent", fetch = FetchType.EAGER)
@@ -108,6 +111,22 @@ public class Customer {
 
     public void setVerification(String verification) {
         this.verification = verification;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public LocalDateTime getResetPasswordExpiration() {
+        return resetPasswordExpiration;
+    }
+
+    public void setResetPasswordExpiration(LocalDateTime resetPasswordExpiration) {
+        this.resetPasswordExpiration = resetPasswordExpiration;
     }
 
     public void setActivate(boolean activate) {

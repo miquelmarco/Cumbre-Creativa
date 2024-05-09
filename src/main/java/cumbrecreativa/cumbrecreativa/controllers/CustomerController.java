@@ -5,6 +5,7 @@ import cumbrecreativa.cumbrecreativa.DTOs.RegisterDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Rol;
 import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
+import cumbrecreativa.cumbrecreativa.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,6 +26,8 @@ public class CustomerController {
     public PasswordEncoder passwordEncoder;
     @Autowired
     public CustomerRepository customerRepository;
+    @Autowired
+    public EmailService emailService;
 
     @GetMapping("/getAllCustomers")
     private ResponseEntity<?> getAllCustomers(Authentication authentication) {
@@ -85,7 +89,40 @@ public class CustomerController {
                 registerDTO.getBirthdate(), registerDTO.getGender(), registerDTO.getRol(), verCode, false, registerDTO.getEmail(),
                 passwordEncoder.encode(registerDTO.getPassword()));
         customerRepository.save(newCustomer);
-        return new ResponseEntity<>("Registro completo", HttpStatus.OK);
-
+        emailService.sendVerificationMail(newCustomer.getEmail(), verCode);
+        return new ResponseEntity<>("Registro completo, verifica tu cuenta", HttpStatus.OK);
+    }
+    @GetMapping("/verifyMail/{code}")
+    public ResponseEntity<?> verifyAccount(@PathVariable String code) {
+        Customer customer = customerRepository.findByVerification(code);
+        if (customer == null) {
+            return new ResponseEntity<>("Código de verificación no válido", HttpStatus.FORBIDDEN);
+        }
+        customer.setActivate(true);
+        customerRepository.save(customer);
+        return  new ResponseEntity<>("Verificación correcta", HttpStatus.OK);
+    }
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<?> forgotPassword (@RequestParam String email) {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer == null) {
+            return new ResponseEntity<>("No se encontró el usuario", HttpStatus.NOT_FOUND);
+        }
+        String token = UUID.randomUUID().toString();
+        customer.setResetPasswordToken(token);
+        customer.setResetPasswordExpiration(LocalDateTime.now().plusHours(1));
+        customerRepository.save(customer);
+        emailService.passwordRecovery(customer.getEmail(), token);
+        return new ResponseEntity<>("Correo de restablecimiento enviado", HttpStatus.OK);
+    }
+    @PostMapping("/resetPassword/{token}")
+    public ResponseEntity<?> resetPassword (@PathVariable String token, @RequestParam String newPassword) {
+        Customer customer = customerRepository.findByResetPasswordToken(token);
+        if (customer ==  null || customer.getResetPasswordExpiration().isBefore(LocalDateTime.now())) {
+            return new ResponseEntity<>("Enlace inválido o caducado", HttpStatus.FORBIDDEN);
+        }
+        customer.setPassword(passwordEncoder.encode(newPassword));
+        customerRepository.save(customer);
+        return new ResponseEntity<>("Contraseña restablecida correctamente", HttpStatus.OK);
     }
 }

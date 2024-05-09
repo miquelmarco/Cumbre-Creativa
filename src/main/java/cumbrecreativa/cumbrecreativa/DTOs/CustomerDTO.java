@@ -33,7 +33,7 @@ public class CustomerDTO {
         rol = customer.getRol();
         isActivate = customer.isActivate();
         email = customer.getEmail();
-        this.verification = customer.getVerification();
+        verification = customer.getVerification();
         eventSet = customer.getEventSet().stream().map(EventDTO::new).collect(Collectors.toSet());
         commentSet = customer.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
         ratingSet = customer.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
