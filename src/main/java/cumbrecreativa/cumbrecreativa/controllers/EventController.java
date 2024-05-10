@@ -32,12 +32,8 @@ public class EventController {
     private LocationRepository locationRepository;
 
     @GetMapping("/getAllEvents")
-    private ResponseEntity<?> getAllEvents(Authentication authentication) {
-        Customer customer = customerRepository.findByEmail(authentication.getName());
-        if (customer == null || customer.getRol() != Rol.ADMIN) {
-            return new ResponseEntity<>("Acceso denegado", HttpStatus.FORBIDDEN);
-        }
-        Set<EventDTO> eventDTOSet = eventRepository.findAll().stream().map(EventDTO::new).collect(Collectors.toSet());
+    private ResponseEntity<?> getAllEvents() {
+        Set<EventDTO> eventDTOSet = eventRepository.findAll().stream().filter(Event::isActivated).map(EventDTO::new).collect(Collectors.toSet());
         return new ResponseEntity<>(eventDTOSet, HttpStatus.OK);
     }
 
