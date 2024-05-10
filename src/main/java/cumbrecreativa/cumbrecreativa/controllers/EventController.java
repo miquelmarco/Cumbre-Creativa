@@ -2,6 +2,7 @@ package cumbrecreativa.cumbrecreativa.controllers;
 
 import cumbrecreativa.cumbrecreativa.DTOs.EventCreatorDTO;
 import cumbrecreativa.cumbrecreativa.DTOs.EventDTO;
+import cumbrecreativa.cumbrecreativa.DTOs.EventEditorDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Location;
@@ -70,5 +71,30 @@ public class EventController {
         locationRepository.save(location);
         eventRepository.save(newEvent);
         return new ResponseEntity<>("Evento creado", HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/editEvent")
+    public ResponseEntity<?> editEvent(Authentication authentication, @RequestBody EventEditorDTO eEditor) {
+        if (authentication == null || authentication.getName() == null) {
+            return new ResponseEntity<>("No estás autenticado.", HttpStatus.UNAUTHORIZED);
+        }
+        Customer customer = customerRepository.findByEmail(authentication.getName());
+        if (customer == null) {
+            return new ResponseEntity<>("Debes estar logueado para realizar esta acción", HttpStatus.FORBIDDEN);
+        }
+        Event event = eventRepository.findById(eEditor.getEventId()).orElse(null);
+        if (event == null) {
+            return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
+        }
+        if (!(customer.getRol() == Rol.ADMIN || (customer.getRol() == Rol.ORGANIZER && customer.getEventSet().contains(event)))) {
+            return new ResponseEntity<>("No tienes los permisos necesarios para modificar este evento", HttpStatus.UNAUTHORIZED);
+        }
+        event.setTitle(eEditor.getTitle());
+        event.setDescription(eEditor.getDescription());
+        event.setDate(eEditor.getDate());
+        event.setTime(eEditor.getTime());
+        event.setActivated(eEditor.isActivated());
+        eventRepository.save(event);
+        return new ResponseEntity<>("Evento modificado", HttpStatus.OK);
     }
 }
