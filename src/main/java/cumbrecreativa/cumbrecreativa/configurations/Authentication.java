@@ -32,7 +32,7 @@ public class Authentication extends GlobalAuthenticationConfigurerAdapter {
                 throw new UsernameNotFoundException("Email no encontrado: " + inputMail + "Hace falta registro");
             }
             if (!customer.isActivate()) {
-                throw new DisabledException("Cuenta no activada" + inputMail);
+                throw new DisabledException("Cuenta no activada: " + inputMail);
             }
             return new User(customer.getEmail(), customer.getPassword(), AuthorityUtils.createAuthorityList(customer.getRol().toString()));
         });
