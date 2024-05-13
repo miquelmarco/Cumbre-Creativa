@@ -3,6 +3,7 @@ package cumbrecreativa.cumbrecreativa.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Event {
     private LocalTime time;
     private Byte rating;
     private boolean isActivated;
+    private boolean isExpired = false;
     @OneToMany(mappedBy = "eventComment", fetch = FetchType.EAGER)
     private Set<Comment> commentSet = new HashSet<>();
     @OneToMany(mappedBy = "eventAssistance", fetch = FetchType.EAGER)
@@ -105,6 +107,14 @@ public class Event {
         isActivated = activated;
     }
 
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
     public Set<Comment> getCommentSet() {
         return commentSet;
     }
@@ -149,5 +159,12 @@ public class Event {
     public void addRating(Rating rating) {
         rating.setEventRating(this);
         ratingSet.add(rating);
+    }
+    //other methods
+    @Transient
+    public void updateIsExpired() {
+        LocalDateTime eventTime = LocalDateTime.of(date, time).plusHours(1);
+        LocalDateTime now = LocalDateTime.now();
+        isExpired = now.isAfter(eventTime);
     }
 }

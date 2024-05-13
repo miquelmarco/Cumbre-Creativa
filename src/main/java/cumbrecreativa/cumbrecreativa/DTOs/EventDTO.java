@@ -15,6 +15,7 @@ public class EventDTO {
     private LocalTime time;
     private Byte rating;
     private boolean isActivated;
+    private boolean isExpired;
     private CustomerDTO userEvent;
     private LocationDTO location;
     private Set<CommentDTO> commentSet;
@@ -32,6 +33,7 @@ public class EventDTO {
         time = event.getTime();
         rating = event.getRating();
         isActivated = event.isActivated();
+        isExpired = event.isExpired();
         userEvent = new CustomerDTO(event.getUserEvent());
         location = new LocationDTO(event.getLocation());
         commentSet = event.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
@@ -65,6 +67,10 @@ public class EventDTO {
 
     public boolean isActivated() {
         return isActivated;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
     }
 
     public CustomerDTO getUserEvent() {
