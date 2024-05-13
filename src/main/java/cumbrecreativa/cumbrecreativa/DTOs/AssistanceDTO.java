@@ -5,6 +5,8 @@ import cumbrecreativa.cumbrecreativa.models.Assistance;
 public class AssistanceDTO {
     private Byte companion;
     private boolean isActive;
+    private boolean isCancel;
+    private String confirmationCode;
     private CustomerDTO userAssistance;
     private EventDTO eventAssistance;
 
@@ -14,6 +16,8 @@ public class AssistanceDTO {
     public AssistanceDTO(Assistance assistance) {
         companion = assistance.getCompanion();
         isActive = assistance.isActive();
+        isCancel = assistance.isCancel();
+        confirmationCode = assistance.getConfirmationCode();
         userAssistance = new CustomerDTO(assistance.getUserAssistance());
         eventAssistance = new EventDTO(assistance.getEventAssistance());
     }
@@ -24,6 +28,14 @@ public class AssistanceDTO {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public boolean isCancel() {
+        return isCancel;
+    }
+
+    public String getConfirmationCode() {
+        return confirmationCode;
     }
 
     public CustomerDTO getUserAssistance() {

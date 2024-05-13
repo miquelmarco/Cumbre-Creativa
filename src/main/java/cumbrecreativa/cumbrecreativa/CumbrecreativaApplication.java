@@ -27,10 +27,12 @@ public class CumbrecreativaApplication {
         return args -> {
             Customer testCustomer = new Customer("testUser", "testUser", "testUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ADMIN, "lala",true, "testmail@outlook.com", passwordEncoder.encode("123456"));
             customerRepository.save(testCustomer);
+            Customer organCustomer = new Customer("organUser", "organUser", "organUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ORGANIZER, "lalala", true, "miquel.marco.01@gmail.com", passwordEncoder.encode("123456"));
+            customerRepository.save(organCustomer);
 //            Event testEvent = new Event("testevent", "testOrganizer", "testDescription", LocalDate.now(), LocalTime.now(), (byte) 4);
 //            eventRepository.save(testEvent);
-            Assistance testAssistance = new Assistance();
-            assistanceRepository.save(testAssistance);
+//            Assistance testAssistance = new Assistance();
+//            assistanceRepository.save(testAssistance);
             Comment testComment = new Comment("testText", LocalDate.now());
             commentRepository.save(testComment);
             Location testLocation = new Location("testName", "testAddress", "testCity", "testCountry", "testGPS");

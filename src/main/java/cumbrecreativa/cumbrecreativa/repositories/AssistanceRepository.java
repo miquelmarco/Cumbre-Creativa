@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssistanceRepository extends JpaRepository<Assistance, Long> {
+    Assistance findByConfirmationCode(String code);
 }

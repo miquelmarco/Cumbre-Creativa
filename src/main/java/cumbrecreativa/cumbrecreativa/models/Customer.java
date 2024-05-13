@@ -191,4 +191,8 @@ public class Customer {
         event.setUserEvent(this);
         eventSet.add(event);
     }
+    public void addAssistance(Assistance assistance) {
+        assistance.setUserAssistance(this);
+        assistanceSet.add(assistance);
+    }
 }

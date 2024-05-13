@@ -1,7 +1,6 @@
 package cumbrecreativa.cumbrecreativa.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,15 @@ public class EmailService {
         message.setTo(to);
         message.setSubject("Restablece tu contraseña");
         message.setText("Haz click para restablecer tu contraseña " + resetLink + " Código válido por una hora");
+        mailSender.send(message);
+    }
+    public void sendVerificationAssistance(String to, String code) {
+        String assistanceLink = "http://localhost:8080/api/confirmAssistance/" + code;
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("miquel.marco@outlook.com");
+        message.setTo(to);
+        message.setSubject("Confirma tu asistencia");
+        message.setText("Confirma tu asistencia al evento haciendo click: " + assistanceLink);
         mailSender.send(message);
     }
 }

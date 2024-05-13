@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -159,6 +160,10 @@ public class Event {
     public void addRating(Rating rating) {
         rating.setEventRating(this);
         ratingSet.add(rating);
+    }
+    public void addAssistance(Assistance assistance) {
+        assistance.setEventAssistance(this);
+        assistanceSet.add(assistance);
     }
     //other methods
     @Transient

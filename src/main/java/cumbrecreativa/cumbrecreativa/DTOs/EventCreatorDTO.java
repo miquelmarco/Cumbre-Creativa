@@ -8,7 +8,7 @@ public class EventCreatorDTO {
     private String description;
     private LocalDate date;
     private LocalTime time;
-    private Long eventId;
+    private Long locationId;
 
     public EventCreatorDTO() {
     }
@@ -29,7 +29,7 @@ public class EventCreatorDTO {
         return time;
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Long getLocationId() {
+        return locationId;
     }
 }

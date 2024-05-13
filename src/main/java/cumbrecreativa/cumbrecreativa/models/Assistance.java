@@ -9,6 +9,8 @@ public class Assistance {
     private Long id;
     private Byte companion;
     private boolean isActive;
+    private boolean isCancel;
+    private String confirmationCode;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Customer userAssistance;
@@ -19,9 +21,10 @@ public class Assistance {
     public Assistance() {
     }
 
-    public Assistance(Byte companion, boolean isActive) {
+    public Assistance(Byte companion, boolean isActive, boolean isCancel) {
         this.companion = companion;
         this.isActive = isActive;
+        this.isCancel = isCancel;
     }
 
     public Long getId() {
@@ -42,6 +45,22 @@ public class Assistance {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isCancel() {
+        return isCancel;
+    }
+
+    public void setCancel(boolean cancel) {
+        isCancel = cancel;
+    }
+
+    public String getConfirmationCode() {
+        return confirmationCode;
+    }
+
+    public void setConfirmationCode(String confirmationCode) {
+        this.confirmationCode = confirmationCode;
     }
 
     public Customer getUserAssistance() {
