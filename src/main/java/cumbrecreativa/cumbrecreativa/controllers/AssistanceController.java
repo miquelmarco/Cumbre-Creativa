@@ -46,17 +46,29 @@ public class AssistanceController {
         }
         Customer customer = customerRepository.findByEmail(authentication.getName());
         Event event = eventRepository.findById(eventId).orElse(null);
+        if (event == null) {
+            return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
+        }
+        Assistance existingAssistance = customer.getAssistanceSet().stream()
+                .filter(assistance -> assistance.getEventAssistance().equals(event))
+                .findFirst().orElse(null);
+        if (existingAssistance != null && !existingAssistance.isCancel()) {
+            return new ResponseEntity<>("Ya has generado una asistencia a este evento", HttpStatus.FORBIDDEN);
+        }
         Assistance newAssistance = new Assistance(companion, false, false);
         customer.addAssistance(newAssistance);
         event.addAssistance(newAssistance);
-        assistanceRepository.save(newAssistance);
-        eventRepository.save(event);
-        customerRepository.save(customer);
-        String verCode = UUID.randomUUID().toString();
-        newAssistance.setConfirmationCode(verCode);
-        assistanceRepository.save(newAssistance);
-        emailService.sendVerificationAssistance(customer.getEmail(), verCode);
-        return new ResponseEntity<>("Asistencia ingresada, revisa tu email para confirmar", HttpStatus.ACCEPTED);
+        try {
+            eventRepository.save(event);
+            customerRepository.save(customer);
+            String verCode = UUID.randomUUID().toString();
+            newAssistance.setConfirmationCode(verCode);
+            assistanceRepository.save(newAssistance);
+            emailService.sendVerificationAssistance(customer.getEmail(), verCode);
+            return new ResponseEntity<>("Asistencia ingresada, revisa tu email para confirmar", HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al guardar la asistencia", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/confirmAssistance/{code}")
@@ -72,9 +84,10 @@ public class AssistanceController {
         assistanceRepository.save(assistance);
         return new ResponseEntity<>("Asistencia confirmada", HttpStatus.OK);
     }
+
     @GetMapping("/getOrganAssistances")
     public ResponseEntity<?> getOrganAssistances(Authentication authentication, @RequestParam Long eventId) {
-        if (authentication == null ||  authentication.getName() == null) {
+        if (authentication == null || authentication.getName() == null) {
             return new ResponseEntity<>("Debes estar logueado", HttpStatus.FORBIDDEN);
         }
         if (eventId == null) {
@@ -91,6 +104,7 @@ public class AssistanceController {
         }
         return new ResponseEntity<>(assistanceDTOS, HttpStatus.FOUND);
     }
+
     @GetMapping("/getAssistancesByEventId/{eventId}")
     public ResponseEntity<?> getAssistancesByEventId(Authentication authentication, @PathVariable Long eventId) {
         if (authentication == null || authentication.getName() == null) {
@@ -111,6 +125,7 @@ public class AssistanceController {
         assistanceDTOS = event.getAssistanceSet().stream().map(AssistanceDTO::new).collect(Collectors.toSet());
         return new ResponseEntity<>(assistanceDTOS, HttpStatus.OK);
     }
+
     @PatchMapping("/cancelAssistance")
     public ResponseEntity<?> cancelAssistance(Authentication authentication, @RequestParam Long assistanceId) {
         if (authentication == null || authentication.getName() == null) {
@@ -120,7 +135,7 @@ public class AssistanceController {
         if (customer == null || customer.getRol() == Rol.USER) {
             return new ResponseEntity<>("No autorizado para esta acción", HttpStatus.FORBIDDEN);
         }
-        Assistance assistance =  assistanceRepository.findById(assistanceId).orElse(null);
+        Assistance assistance = assistanceRepository.findById(assistanceId).orElse(null);
         if (assistance == null) {
             return new ResponseEntity<>("Asistente no encontrado", HttpStatus.NOT_FOUND);
         }

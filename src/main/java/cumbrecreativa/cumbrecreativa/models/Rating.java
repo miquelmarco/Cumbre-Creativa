@@ -17,6 +17,8 @@ public class Rating {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private Event eventRating;
+    @OneToOne(mappedBy = "rating")
+    private Comment comment;
 
     public Rating() {
     }
@@ -62,5 +64,13 @@ public class Rating {
 
     public void setEventRating(Event eventRating) {
         this.eventRating = eventRating;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 }

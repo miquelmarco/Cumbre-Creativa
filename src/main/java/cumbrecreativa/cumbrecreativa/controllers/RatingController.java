@@ -1,8 +1,11 @@
 package cumbrecreativa.cumbrecreativa.controllers;
 
+import cumbrecreativa.cumbrecreativa.DTOs.RatingDTO;
+import cumbrecreativa.cumbrecreativa.models.Comment;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Rating;
+import cumbrecreativa.cumbrecreativa.repositories.CommentRepository;
 import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
 import cumbrecreativa.cumbrecreativa.repositories.EventRepository;
 import cumbrecreativa.cumbrecreativa.repositories.RatingRepository;
@@ -12,13 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -29,9 +30,21 @@ public class RatingController {
     private EventRepository eventRepository;
     @Autowired
     private RatingRepository ratingRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @GetMapping("/getRatingsById/{eventId}")
+    public ResponseEntity<?> getRatingsById(@PathVariable Long eventId) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event == null) {
+            return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
+        }
+        Set<RatingDTO> ratingSet = event.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
+        return new ResponseEntity<>(ratingSet, HttpStatus.OK);
+    }
 
     @PostMapping("/newRating")
-    public ResponseEntity<?> newRating(@RequestParam Byte rating, @RequestParam Long eventId, Authentication authentication) {
+    public ResponseEntity<?> newRating(@RequestParam Byte rating, @RequestParam Long eventId, @RequestParam String textComment, Authentication authentication) {
         Logger logger = LoggerFactory.getLogger(getClass());
 
         try {
@@ -40,6 +53,9 @@ public class RatingController {
             }
             if (rating < 1 || rating > 5) {
                 return new ResponseEntity<>("Calificación no válida", HttpStatus.FORBIDDEN);
+            }
+            if (textComment.isBlank()) {
+                return new ResponseEntity<>("Comentario no encontrado", HttpStatus.NOT_FOUND);
             }
             if (authentication == null || authentication.getName() == null) {
                 return new ResponseEntity<>("Debes estar logueado para calificar", HttpStatus.FORBIDDEN);
@@ -56,7 +72,12 @@ public class RatingController {
             if (hasRated) {
                 return new ResponseEntity<>("Ya has calificado este evento", HttpStatus.CONFLICT);
             }
+
+            Comment comment = new Comment(textComment, LocalDate.now());
             Rating newRating = new Rating(rating, LocalDate.now(), customer, event);
+            comment.setRating(newRating);
+            newRating.setComment(comment);
+            commentRepository.save(comment);
             ratingRepository.save(newRating);
             customer.addRating(newRating);
             event.addRating(newRating);

@@ -17,6 +17,9 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private Event eventComment;
+    @OneToOne
+    @JoinColumn(name = "rating_id")
+    private Rating rating;
     public Comment() {
     }
 
@@ -59,5 +62,13 @@ public class Comment {
 
     public void setEventComment(Event eventComment) {
         this.eventComment = eventComment;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 }

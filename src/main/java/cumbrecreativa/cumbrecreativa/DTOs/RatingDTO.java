@@ -9,6 +9,7 @@ public class RatingDTO {
     private LocalDate date;
     private CustomerDTO userRating;
     private EventDTO eventRating;
+    private CommentDTO comment;
 
     public RatingDTO() {
     }
@@ -18,6 +19,7 @@ public class RatingDTO {
         date = ratingdto.getDate();
         userRating = new CustomerDTO(ratingdto.getUserRating());
         eventRating = new EventDTO(ratingdto.getEventRating());
+        comment = new CommentDTO(ratingdto.getComment());
     }
 
     public Byte getRating() {
@@ -34,5 +36,9 @@ public class RatingDTO {
 
     public EventDTO getEventRating() {
         return eventRating;
+    }
+
+    public CommentDTO getComment() {
+        return comment;
     }
 }
