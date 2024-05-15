@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
@@ -116,38 +117,47 @@ public class Event {
         isExpired = expired;
     }
 
+    @JsonIgnore
     public Set<Comment> getCommentSet() {
         return commentSet;
     }
 
+    @JsonIgnore
     public void setCommentSet(Set<Comment> commentSet) {
         this.commentSet = commentSet;
     }
 
+    @JsonIgnore
     public Set<Assistance> getAssistanceSet() {
         return assistanceSet;
     }
 
+    @JsonIgnore
     public void setAssistanceSet(Set<Assistance> assistanceSet) {
         this.assistanceSet = assistanceSet;
     }
 
+    @JsonIgnore
     public Set<Rating> getRatingSet() {
         return ratingSet;
     }
 
+    @JsonIgnore
     public void setRatingSet(Set<Rating> ratingSet) {
         this.ratingSet = ratingSet;
     }
 
+    @JsonIgnore
     public Customer getUserEvent() {
         return userEvent;
     }
 
+    @JsonIgnore
     public void setUserEvent(Customer userEvent) {
         this.userEvent = userEvent;
     }
 
+    @JsonIgnore
     public Location getLocation() {
         return location;
     }
@@ -161,10 +171,12 @@ public class Event {
         rating.setEventRating(this);
         ratingSet.add(rating);
     }
+
     public void addAssistance(Assistance assistance) {
         assistance.setEventAssistance(this);
         assistanceSet.add(assistance);
     }
+
     //other methods
     @Transient
     public void updateIsExpired() {

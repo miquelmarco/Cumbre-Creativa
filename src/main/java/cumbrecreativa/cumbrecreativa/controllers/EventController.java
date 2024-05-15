@@ -7,9 +7,9 @@ import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Location;
 import cumbrecreativa.cumbrecreativa.models.Rol;
-import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
-import cumbrecreativa.cumbrecreativa.repositories.EventRepository;
-import cumbrecreativa.cumbrecreativa.repositories.LocationRepository;
+import cumbrecreativa.cumbrecreativa.services.CustomerService;
+import cumbrecreativa.cumbrecreativa.services.EventService;
+import cumbrecreativa.cumbrecreativa.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +17,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class EventController {
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;
     @Autowired
-    private LocationRepository locationRepository;
+    private LocationService locationService;
 
     @GetMapping("/getAllEvents")
     private ResponseEntity<?> getAllEvents() {
-        Set<EventDTO> eventDTOSet = eventRepository.findAll().stream().filter(Event::isActivated).map(EventDTO::new).collect(Collectors.toSet());
+        Set<EventDTO> eventDTOSet = eventService.findAll();
         return new ResponseEntity<>(eventDTOSet, HttpStatus.OK);
     }
 
     @PostMapping("/newEvent")
     public ResponseEntity<?> newEvent(Authentication authentication, @RequestBody EventCreatorDTO eCreator) {
-        Customer customer = customerRepository.findByEmail(authentication.getName());
+        Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null || customer.getRol() == Rol.USER) {
             return new ResponseEntity<>("Debes tener perfil de organizador para ingresar nuevos eventos", HttpStatus.FORBIDDEN);
         }
@@ -55,17 +53,19 @@ public class EventController {
         if (eCreator.getDate() == null || eCreator.getTime().toString().isBlank()) {
             return new ResponseEntity<>("Debes ingresar una hora de evento", HttpStatus.FORBIDDEN);
         }
-        Optional<Location> optionalLocation = locationRepository.findById(eCreator.getLocationId());
-        if (optionalLocation.isEmpty()) {
-            return new ResponseEntity<>("Locación de evento incorrecta", HttpStatus.FORBIDDEN);
+        if (eCreator.getLocationId() == null) {
+            return new ResponseEntity<>("Debes ingresar una locación de evento", HttpStatus.FORBIDDEN);
         }
-        Location location = optionalLocation.get();
+        Location location = locationService.findById(eCreator.getLocationId());
+        if (location == null) {
+            return new ResponseEntity<>("Locación no válida", HttpStatus.FORBIDDEN);
+        }
         Event newEvent = new Event(eCreator.getTitle(), customer.getUserName(), eCreator.getDescription(), eCreator.getDate(), eCreator.getTime(), (byte) 0, true);
         customer.addEvent(newEvent);
         location.addEvent(newEvent);
-        customerRepository.save(customer);
-        locationRepository.save(location);
-        eventRepository.save(newEvent);
+        customerService.save(customer);
+        locationService.save(location);
+        eventService.save(newEvent);
         return new ResponseEntity<>("Evento creado", HttpStatus.CREATED);
     }
 
@@ -74,11 +74,11 @@ public class EventController {
         if (authentication == null || authentication.getName() == null) {
             return new ResponseEntity<>("No estás autenticado.", HttpStatus.UNAUTHORIZED);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
+        Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null) {
             return new ResponseEntity<>("Debes estar logueado para realizar esta acción", HttpStatus.FORBIDDEN);
         }
-        Event event = eventRepository.findById(eEditor.getEventId()).orElse(null);
+        Event event = eventService.findById(eEditor.getEventId());
         if (event == null) {
             return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
         }
@@ -90,7 +90,7 @@ public class EventController {
         event.setDate(eEditor.getDate());
         event.setTime(eEditor.getTime());
         event.setActivated(eEditor.isActivated());
-        eventRepository.save(event);
+        eventService.save(event);
         return new ResponseEntity<>("Evento modificado", HttpStatus.OK);
     }
 }

@@ -5,10 +5,11 @@ import cumbrecreativa.cumbrecreativa.models.Comment;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Rating;
-import cumbrecreativa.cumbrecreativa.repositories.CommentRepository;
-import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
-import cumbrecreativa.cumbrecreativa.repositories.EventRepository;
 import cumbrecreativa.cumbrecreativa.repositories.RatingRepository;
+import cumbrecreativa.cumbrecreativa.services.CommentService;
+import cumbrecreativa.cumbrecreativa.services.CustomerService;
+import cumbrecreativa.cumbrecreativa.services.EventService;
+import cumbrecreativa.cumbrecreativa.services.RatingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +26,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class RatingController {
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;
     @Autowired
-    private RatingRepository ratingRepository;
+    private RatingService ratingService;
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @GetMapping("/getRatingsById/{eventId}")
     public ResponseEntity<?> getRatingsById(@PathVariable Long eventId) {
-        Event event = eventRepository.findById(eventId).orElse(null);
+        Event event = eventService.findById(eventId);
         if (event == null) {
             return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
         }
@@ -60,11 +61,11 @@ public class RatingController {
             if (authentication == null || authentication.getName() == null) {
                 return new ResponseEntity<>("Debes estar logueado para calificar", HttpStatus.FORBIDDEN);
             }
-            Customer customer = customerRepository.findByEmail(authentication.getName());
+            Customer customer = customerService.findByEmail(authentication.getName());
             if (customer == null) {
                 return new ResponseEntity<>("Usuario no encontrado", HttpStatus.FORBIDDEN);
             }
-            Event event = eventRepository.findById(eventId).orElse(null);
+            Event event = eventService.findById(eventId);
             if (event == null) {
                 return new ResponseEntity<>("Evento no encontrado", HttpStatus.FORBIDDEN);
             }
@@ -77,18 +78,18 @@ public class RatingController {
             Rating newRating = new Rating(rating, LocalDate.now(), customer, event);
             comment.setRating(newRating);
             newRating.setComment(comment);
-            commentRepository.save(comment);
-            ratingRepository.save(newRating);
+            commentService.save(comment);
+            ratingService.save(newRating);
             customer.addRating(newRating);
             event.addRating(newRating);
-            customerRepository.save(customer);
-            eventRepository.save(event);
+            customerService.save(customer);
+            eventService.save(event);
 
             Set<Rating> ratings = event.getRatingSet();
             double average = ratings.stream().mapToInt(Rating::getRating).average().orElse(0.0);
             Byte averageByte = (byte) Math.round(average);
             event.setRating(averageByte);
-            eventRepository.save(event);
+            eventService.save(event);
             return new ResponseEntity<>("Calificación ingresada", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error al ingresar calificación o calcular el promedio", e);

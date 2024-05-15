@@ -4,8 +4,8 @@ import cumbrecreativa.cumbrecreativa.DTOs.LocationCreatorDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Location;
 import cumbrecreativa.cumbrecreativa.models.Rol;
-import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
-import cumbrecreativa.cumbrecreativa.repositories.LocationRepository;
+import cumbrecreativa.cumbrecreativa.services.CustomerService;
+import cumbrecreativa.cumbrecreativa.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class LocationController {
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
     @Autowired
-    private LocationRepository locationRepository;
+    private LocationService locationService;
     @PostMapping("/newLocation")
     public ResponseEntity<?> newLocation(Authentication authentication, @RequestBody LocationCreatorDTO lCreator) {
         if (authentication == null || authentication.getName() == null) {
             return new ResponseEntity<>("Debes estar autenticado", HttpStatus.FORBIDDEN);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
+        Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null || customer.getRol() == Rol.USER) {
             return new ResponseEntity<>("Sin autorización para ingresar locaciones", HttpStatus.FORBIDDEN);
         }
@@ -44,7 +44,7 @@ public class LocationController {
         if (lCreator.getGps() != null) {
             variableGPS = lCreator.getGps();
         }
-        locationRepository.save(new Location(lCreator.getName(), lCreator.getAddress(), lCreator.getCity(), lCreator.getCountry(), variableGPS));
+        locationService.save(new Location(lCreator.getName(), lCreator.getAddress(), lCreator.getCity(), lCreator.getCountry(), variableGPS));
         return new ResponseEntity<>("Locación ingresada", HttpStatus.CREATED);
     }
 }

@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -50,18 +51,22 @@ public class Rating {
         this.date = date;
     }
 
+    @JsonIgnore
     public Customer getUserRating() {
         return userRating;
     }
 
+    @JsonIgnore
     public void setUserRating(Customer userRating) {
         this.userRating = userRating;
     }
 
+    @JsonIgnore
     public Event getEventRating() {
         return eventRating;
     }
 
+    @JsonIgnore
     public void setEventRating(Event eventRating) {
         this.eventRating = eventRating;
     }

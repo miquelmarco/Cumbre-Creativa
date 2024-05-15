@@ -1,15 +1,14 @@
 package cumbrecreativa.cumbrecreativa.controllers;
 
 import cumbrecreativa.cumbrecreativa.DTOs.AssistanceDTO;
-import cumbrecreativa.cumbrecreativa.DTOs.EventDTO;
 import cumbrecreativa.cumbrecreativa.models.Assistance;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Rol;
-import cumbrecreativa.cumbrecreativa.repositories.AssistanceRepository;
-import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
-import cumbrecreativa.cumbrecreativa.repositories.EventRepository;;
-import cumbrecreativa.cumbrecreativa.services.EmailService;
+import cumbrecreativa.cumbrecreativa.services.AssistanceService;
+import cumbrecreativa.cumbrecreativa.services.CustomerService;
+import cumbrecreativa.cumbrecreativa.services.EventService;
+import cumbrecreativa.cumbrecreativa.services.implement.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,27 +24,27 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class AssistanceController {
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerService customerService;
     @Autowired
-    AssistanceRepository assistanceRepository;
+    private AssistanceService assistanceService;
     @Autowired
-    EventRepository eventRepository;
+    private EventService eventService;
     @Autowired
-    EmailService emailService;
+    private EmailService emailService;
 
     @PostMapping("/newAssistance")
     public ResponseEntity<?> newAssistance(Authentication authentication, @RequestParam Long eventId, @RequestParam Byte companion) {
         if (authentication == null || authentication.getName() == null) {
             return new ResponseEntity<>("Debes estar autenticado", HttpStatus.FORBIDDEN);
         }
-        if (eventId == null || !eventRepository.existsById(eventId)) {
+        if (eventId == null || !eventService.existById(eventId)) {
             return new ResponseEntity<>("Evento no válido o no encontrado", HttpStatus.NOT_FOUND);
         }
         if (companion == null || (companion != 1 && companion != 2 && companion != 3)) {
             return new ResponseEntity<>("Número de acompañantes no válido", HttpStatus.FORBIDDEN);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
-        Event event = eventRepository.findById(eventId).orElse(null);
+        Customer customer = customerService.findByEmail(authentication.getName());
+        Event event = eventService.findById(eventId);
         if (event == null) {
             return new ResponseEntity<>("Evento no encontrado", HttpStatus.NOT_FOUND);
         }
@@ -59,11 +58,11 @@ public class AssistanceController {
         customer.addAssistance(newAssistance);
         event.addAssistance(newAssistance);
         try {
-            eventRepository.save(event);
-            customerRepository.save(customer);
+            eventService.save(event);
+            customerService.save(customer);
             String verCode = UUID.randomUUID().toString();
             newAssistance.setConfirmationCode(verCode);
-            assistanceRepository.save(newAssistance);
+            assistanceService.save(newAssistance);
             emailService.sendVerificationAssistance(customer.getEmail(), verCode);
             return new ResponseEntity<>("Asistencia ingresada, revisa tu email para confirmar", HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -73,7 +72,7 @@ public class AssistanceController {
 
     @GetMapping("/confirmAssistance/{code}")
     public ResponseEntity<?> confirmAssistance(@PathVariable String code) {
-        Assistance assistance = assistanceRepository.findByConfirmationCode(code);
+        Assistance assistance = assistanceService.findByConfirmationCode(code);
         if (assistance == null) {
             return new ResponseEntity<>("Código no válido", HttpStatus.FORBIDDEN);
         }
@@ -81,7 +80,7 @@ public class AssistanceController {
             return new ResponseEntity<>("La asistencia ya ha sido confirmada anteriormente", HttpStatus.FORBIDDEN);
         }
         assistance.setActive(true);
-        assistanceRepository.save(assistance);
+        assistanceService.save(assistance);
         return new ResponseEntity<>("Asistencia confirmada", HttpStatus.OK);
     }
 
@@ -93,8 +92,8 @@ public class AssistanceController {
         if (eventId == null) {
             return new ResponseEntity<>("Evento no encontrado o no válido", HttpStatus.NOT_FOUND);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
-        Event event = eventRepository.findById(eventId).orElse(null);
+        Customer customer = customerService.findByEmail(authentication.getName());
+        Event event = eventService.findById(eventId);
         if (customer == null || customer.getRol() != Rol.ORGANIZER) {
             return new ResponseEntity<>("No autorizado para realizar esta acción", HttpStatus.FORBIDDEN);
         }
@@ -113,8 +112,8 @@ public class AssistanceController {
         if (eventId == null) {
             return new ResponseEntity<>("Evento no válido", HttpStatus.NOT_FOUND);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
-        Event event = eventRepository.findById(eventId).orElse(null);
+        Customer customer = customerService.findByEmail(authentication.getName());
+        Event event = eventService.findById(eventId);
         if (customer == null || customer.getRol() != Rol.ADMIN) {
             return new ResponseEntity<>("No autorizado para realizar esta acción", HttpStatus.FORBIDDEN);
         }
@@ -131,11 +130,11 @@ public class AssistanceController {
         if (authentication == null || authentication.getName() == null) {
             return new ResponseEntity<>("Debes estar logueado para realizar esta acción", HttpStatus.FORBIDDEN);
         }
-        Customer customer = customerRepository.findByEmail(authentication.getName());
+        Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null || customer.getRol() == Rol.USER) {
             return new ResponseEntity<>("No autorizado para esta acción", HttpStatus.FORBIDDEN);
         }
-        Assistance assistance = assistanceRepository.findById(assistanceId).orElse(null);
+        Assistance assistance = assistanceService.findById(assistanceId);
         if (assistance == null) {
             return new ResponseEntity<>("Asistente no encontrado", HttpStatus.NOT_FOUND);
         }
@@ -144,7 +143,7 @@ public class AssistanceController {
             return new ResponseEntity<>("No autorizado", HttpStatus.FORBIDDEN);
         }
         assistance.setCancel(true);
-        assistanceRepository.save(assistance);
+        assistanceService.save(assistance);
         return new ResponseEntity<>("Asistencia cancelada", HttpStatus.OK);
     }
 }

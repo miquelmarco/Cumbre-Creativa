@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -73,13 +74,16 @@ public class Location {
         this.gps = gps;
     }
 
+    @JsonIgnore
     public Set<Event> getEventsSet() {
         return eventsSet;
     }
 
+    @JsonIgnore
     public void setEventsSet(Set<Event> eventsSet) {
         this.eventsSet = eventsSet;
     }
+
     //add methods
     public void addEvent(Event event) {
         event.setLocation(this);

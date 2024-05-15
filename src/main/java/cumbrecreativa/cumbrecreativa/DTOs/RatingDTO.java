@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cumbrecreativa.cumbrecreativa.models.Rating;
 
 import java.time.LocalDate;
@@ -30,14 +31,17 @@ public class RatingDTO {
         return date;
     }
 
+    @JsonIgnore
     public CustomerDTO getUserRating() {
         return userRating;
     }
 
+    @JsonIgnore
     public EventDTO getEventRating() {
         return eventRating;
     }
 
+    @JsonIgnore
     public CommentDTO getComment() {
         return comment;
     }

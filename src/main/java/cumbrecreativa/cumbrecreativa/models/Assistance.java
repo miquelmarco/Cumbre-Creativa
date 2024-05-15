@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -63,18 +64,22 @@ public class Assistance {
         this.confirmationCode = confirmationCode;
     }
 
+    @JsonIgnore
     public Customer getUserAssistance() {
         return userAssistance;
     }
 
+    @JsonIgnore
     public void setUserAssistance(Customer userAssistance) {
         this.userAssistance = userAssistance;
     }
 
+    @JsonIgnore
     public Event getEventAssistance() {
         return eventAssistance;
     }
 
+    @JsonIgnore
     public void setEventAssistance(Event eventAssistance) {
         this.eventAssistance = eventAssistance;
     }

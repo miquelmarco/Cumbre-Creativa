@@ -1,5 +1,6 @@
 package cumbrecreativa.cumbrecreativa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -149,34 +150,42 @@ public class Customer {
         this.password = password;
     }
 
+    @JsonIgnore
     public Set<Event> getEventSet() {
         return eventSet;
     }
 
+    @JsonIgnore
     public void setEventSet(Set<Event> eventSet) {
         this.eventSet = eventSet;
     }
 
+    @JsonIgnore
     public Set<Comment> getCommentSet() {
         return commentSet;
     }
 
+    @JsonIgnore
     public void setCommentSet(Set<Comment> commentSet) {
         this.commentSet = commentSet;
     }
 
+    @JsonIgnore
     public Set<Rating> getRatingSet() {
         return ratingSet;
     }
 
+    @JsonIgnore
     public void setRatingSet(Set<Rating> ratingSet) {
         this.ratingSet = ratingSet;
     }
 
+    @JsonIgnore
     public Set<Assistance> getAssistanceSet() {
         return assistanceSet;
     }
 
+    @JsonIgnore
     public void setAssistanceSet(Set<Assistance> assistanceSet) {
         this.assistanceSet = assistanceSet;
     }
@@ -191,6 +200,7 @@ public class Customer {
         event.setUserEvent(this);
         eventSet.add(event);
     }
+
     public void addAssistance(Assistance assistance) {
         assistance.setUserAssistance(this);
         assistanceSet.add(assistance);

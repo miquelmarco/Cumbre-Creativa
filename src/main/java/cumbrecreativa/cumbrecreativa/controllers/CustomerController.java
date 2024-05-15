@@ -4,8 +4,8 @@ import cumbrecreativa.cumbrecreativa.DTOs.CustomerDTO;
 import cumbrecreativa.cumbrecreativa.DTOs.RegisterDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Rol;
-import cumbrecreativa.cumbrecreativa.repositories.CustomerRepository;
-import cumbrecreativa.cumbrecreativa.services.EmailService;
+import cumbrecreativa.cumbrecreativa.services.CustomerService;
+import cumbrecreativa.cumbrecreativa.services.implement.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +17,24 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
     @Autowired
-    public PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public CustomerRepository customerRepository;
+    private CustomerService customerService;
     @Autowired
-    public EmailService emailService;
+    private EmailService emailService;
 
     @GetMapping("/getAllCustomers")
     private ResponseEntity<?> getAllCustomers(Authentication authentication) {
-        Customer customer = customerRepository.findByEmail(authentication.getName());
+        Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null || customer.getRol() != Rol.ADMIN) {
             return new ResponseEntity<>("Acceso denegado", HttpStatus.FORBIDDEN);
         }
-        Set<CustomerDTO> customerDTOSet = customerRepository.findAll().stream().map(CustomerDTO::new).collect(Collectors.toSet());
+        Set<CustomerDTO> customerDTOSet = customerService.findAll();
         return new ResponseEntity<>(customerDTOSet, HttpStatus.OK);
     }
 
@@ -54,7 +53,7 @@ public class CustomerController {
         if (!registerDTO.getUserName().matches(usernamePattern)) {
             return new ResponseEntity<>("El nombre de usuario debe contener sólo letras o números y tener máximo 15 caracteres", HttpStatus.FORBIDDEN);
         }
-        if (customerRepository.findByUserName(registerDTO.getUserName()) != null) {
+        if (customerService.findByUserName(registerDTO.getUserName()) != null) {
             return new ResponseEntity<>("Nombre de usuario ya está en uso", HttpStatus.CONFLICT);
         }
         LocalDate today = LocalDate.now();
@@ -78,7 +77,7 @@ public class CustomerController {
         if (registerDTO.getEmail().isBlank()) {
             return new ResponseEntity<>("Debe ingresar un email", HttpStatus.FORBIDDEN);
         }
-        if (customerRepository.findByEmail(registerDTO.getEmail()) != null) {
+        if (customerService.findByEmail(registerDTO.getEmail()) != null) {
             return new ResponseEntity<>("El correo electrónico ya está en uso", HttpStatus.CONFLICT);
         }
         if (registerDTO.getPassword().isBlank()) {
@@ -88,41 +87,41 @@ public class CustomerController {
         Customer newCustomer = new Customer(registerDTO.getName(), registerDTO.getLastName(), registerDTO.getUserName(),
                 registerDTO.getBirthdate(), registerDTO.getGender(), registerDTO.getRol(), verCode, false, registerDTO.getEmail(),
                 passwordEncoder.encode(registerDTO.getPassword()));
-        customerRepository.save(newCustomer);
+        customerService.save(newCustomer);
         emailService.sendVerificationMail(newCustomer.getEmail(), verCode);
         return new ResponseEntity<>("Registro completo, verifica tu cuenta", HttpStatus.OK);
     }
     @GetMapping("/verifyMail/{code}")
     public ResponseEntity<?> verifyAccount(@PathVariable String code) {
-        Customer customer = customerRepository.findByVerification(code);
+        Customer customer = customerService.findByVerification(code);
         if (customer == null) {
             return new ResponseEntity<>("Código de verificación no válido", HttpStatus.FORBIDDEN);
         }
         customer.setActivate(true);
-        customerRepository.save(customer);
+        customerService.save(customer);
         return  new ResponseEntity<>("Verificación correcta", HttpStatus.OK);
     }
     @PostMapping("/forgotPassword")
     public ResponseEntity<?> forgotPassword (@RequestParam String email) {
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = customerService.findByEmail(email);
         if (customer == null) {
             return new ResponseEntity<>("No se encontró el usuario", HttpStatus.NOT_FOUND);
         }
         String token = UUID.randomUUID().toString();
         customer.setResetPasswordToken(token);
         customer.setResetPasswordExpiration(LocalDateTime.now().plusHours(1));
-        customerRepository.save(customer);
+        customerService.save(customer);
         emailService.passwordRecovery(customer.getEmail(), token);
         return new ResponseEntity<>("Correo de restablecimiento enviado", HttpStatus.OK);
     }
     @PostMapping("/resetPassword/{token}")
     public ResponseEntity<?> resetPassword (@PathVariable String token, @RequestParam String newPassword) {
-        Customer customer = customerRepository.findByResetPasswordToken(token);
+        Customer customer = customerService.findByResetPasswordToken(token);
         if (customer ==  null || customer.getResetPasswordExpiration().isBefore(LocalDateTime.now())) {
             return new ResponseEntity<>("Enlace inválido o caducado", HttpStatus.FORBIDDEN);
         }
         customer.setPassword(passwordEncoder.encode(newPassword));
-        customerRepository.save(customer);
+        customerService.save(customer);
         return new ResponseEntity<>("Contraseña restablecida correctamente", HttpStatus.OK);
     }
 }
