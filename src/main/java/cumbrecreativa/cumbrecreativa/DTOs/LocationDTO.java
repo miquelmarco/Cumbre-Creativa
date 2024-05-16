@@ -1,6 +1,5 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import cumbrecreativa.cumbrecreativa.models.Location;
 
 import java.util.Set;
@@ -46,7 +45,6 @@ public class LocationDTO {
         return gps;
     }
 
-    @JsonIgnore
     public Set<EventDTO> getEventsSet() {
         return eventsSet;
     }

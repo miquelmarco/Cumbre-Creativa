@@ -1,7 +1,6 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
 import cumbrecreativa.cumbrecreativa.models.Comment;
-import cumbrecreativa.cumbrecreativa.models.Rating;
 
 import java.time.LocalDate;
 

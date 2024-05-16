@@ -1,6 +1,5 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import cumbrecreativa.cumbrecreativa.models.*;
 
 import java.time.LocalDate;
@@ -78,21 +77,22 @@ public class EventDTO {
         return userEvent;
     }
 
+
     public LocationDTO getLocation() {
         return location;
     }
 
-    @JsonIgnore
+
     public Set<CommentDTO> getCommentSet() {
         return commentSet;
     }
 
-    @JsonIgnore
+
     public Set<AssistanceDTO> getAssistanceSet() {
         return assistanceSet;
     }
 
-    @JsonIgnore
+
     public Set<RatingDTO> getRatingSet() {
         return ratingSet;
     }
