@@ -54,6 +54,9 @@ public class AssistanceController {
         if (existingAssistance != null && !existingAssistance.isCancel()) {
             return new ResponseEntity<>("Ya has generado una asistencia a este evento", HttpStatus.FORBIDDEN);
         }
+        if (existingAssistance != null && !existingAssistance.isActive()) {
+            return new ResponseEntity<>("Debes confirmar el registro previo", HttpStatus.FORBIDDEN);
+        }
         Assistance newAssistance = new Assistance(companion, false, false);
         customer.addAssistance(newAssistance);
         event.addAssistance(newAssistance);

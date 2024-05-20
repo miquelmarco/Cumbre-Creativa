@@ -5,7 +5,6 @@ import cumbrecreativa.cumbrecreativa.models.Comment;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Rating;
-import cumbrecreativa.cumbrecreativa.repositories.RatingRepository;
 import cumbrecreativa.cumbrecreativa.services.CommentService;
 import cumbrecreativa.cumbrecreativa.services.CustomerService;
 import cumbrecreativa.cumbrecreativa.services.EventService;

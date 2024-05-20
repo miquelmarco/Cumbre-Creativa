@@ -32,6 +32,7 @@ public class AssistanceDTO {
                 assistance.getEventAssistance().getTitle(),
                 assistance.getEventAssistance().getOrganizer(),
                 assistance.getEventAssistance().getDescription(),
+                assistance.getEventAssistance().getImg(),
                 assistance.getEventAssistance().getDate(),
                 assistance.getEventAssistance().getTime(),
                 assistance.getEventAssistance().getRating(),

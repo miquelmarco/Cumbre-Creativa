@@ -31,6 +31,7 @@ public class RatingDTO {
                 ratingdto.getEventRating().getTitle(),
                 ratingdto.getEventRating().getOrganizer(),
                 ratingdto.getEventRating().getDescription(),
+                ratingdto.getEventRating().getImg(),
                 ratingdto.getEventRating().getDate(),
                 ratingdto.getEventRating().getTime(),
                 ratingdto.getEventRating().getRating(),

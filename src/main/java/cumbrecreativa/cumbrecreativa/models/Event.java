@@ -17,6 +17,7 @@ public class Event {
     private String title;
     private String organizer;
     private String description;
+    private String img;
     private LocalDate date;
     private LocalTime time;
     private Byte rating;
@@ -38,10 +39,11 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String organizer, String description, LocalDate date, LocalTime time, Byte rating, boolean isActivated) {
+    public Event(String title, String organizer, String description, String img, LocalDate date, LocalTime time, Byte rating, boolean isActivated) {
         this.title = title;
         this.organizer = organizer;
         this.description = description;
+        this.img = img;
         this.date = date;
         this.time = time;
         this.rating = rating;
@@ -74,6 +76,14 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public LocalDate getDate() {

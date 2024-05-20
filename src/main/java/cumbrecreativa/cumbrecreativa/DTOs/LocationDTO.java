@@ -26,6 +26,7 @@ public class LocationDTO {
                         event.getTitle(),
                         event.getOrganizer(),
                         event.getDescription(),
+                        event.getImg(),
                         event.getDate(),
                         event.getTime(),
                         event.getRating(),

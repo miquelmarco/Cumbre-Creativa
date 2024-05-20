@@ -36,6 +36,7 @@ public class CommentDTO {
                 comment.getEventComment().getTitle(),
                 comment.getEventComment().getOrganizer(),
                 comment.getEventComment().getDescription(),
+                comment.getEventComment().getImg(),
                 comment.getEventComment().getDate(),
                 comment.getEventComment().getTime(),
                 comment.getEventComment().getRating(),

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @SpringBootApplication
 public class CumbrecreativaApplication {
@@ -25,20 +24,13 @@ public class CumbrecreativaApplication {
     @Bean
     public CommandLineRunner initData(CustomerRepository customerRepository, EventRepository eventRepository, AssistanceRepository assistanceRepository, CommentRepository commentRepository, LocationRepository locationRepository, RatingRepository ratingRepository) {
         return args -> {
-            Customer testCustomer = new Customer("testUser", "testUser", "testUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ADMIN, "lala",true, "testmail@outlook.com", passwordEncoder.encode("123456"));
+            Customer testCustomer = new Customer("testUser", "testUser", "testUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ADMIN, "lala", true, "miquel.marco@outlook.com", passwordEncoder.encode("123456"));
             customerRepository.save(testCustomer);
             Customer organCustomer = new Customer("organUser", "organUser", "organUser", LocalDate.of(1987, 4, 8), Gender.NOTSPECIFY, Rol.ORGANIZER, "lalala", true, "miquel.marco.01@gmail.com", passwordEncoder.encode("123456"));
             customerRepository.save(organCustomer);
-//            Event testEvent = new Event("testevent", "testOrganizer", "testDescription", LocalDate.now(), LocalTime.now(), (byte) 4);
-//            eventRepository.save(testEvent);
-//            Assistance testAssistance = new Assistance();
-//            assistanceRepository.save(testAssistance);
-//            Comment testComment = new Comment("testText", LocalDate.now());
-//            commentRepository.save(testComment);
+            ;
             Location testLocation = new Location("testName", "testAddress", "testCity", "testCountry", "testGPS");
             locationRepository.save(testLocation);
-//            Rating testRating = new Rating((byte) 4, LocalDate.now());
-//            ratingRepository.save(testRating);
         };
     }
 }

@@ -11,6 +11,7 @@ public class EventDTO {
     private String title;
     private String organizer;
     private String description;
+    private String img;
     private LocalDate date;
     private LocalTime time;
     private Byte rating;
@@ -25,10 +26,11 @@ public class EventDTO {
     public EventDTO() {
     }
 
-    public EventDTO(String title, String organizer, String description, LocalDate date, LocalTime time, Byte rating, boolean isActivated, boolean isExpired) {
+    public EventDTO(String title, String organizer, String description, String img, LocalDate date, LocalTime time, Byte rating, boolean isActivated, boolean isExpired) {
         this.title = title;
         this.organizer = organizer;
         this.description = description;
+        this.img = img;
         this.date = date;
         this.time = time;
         this.rating = rating;
@@ -40,6 +42,7 @@ public class EventDTO {
         title = event.getTitle();
         organizer = event.getOrganizer();
         description = event.getDescription();
+        img = event.getImg();
         date = event.getDate();
         time = event.getTime();
         rating = event.getRating();
@@ -71,6 +74,10 @@ public class EventDTO {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getImg() {
+        return img;
     }
 
     public LocalDate getDate() {
