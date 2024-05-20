@@ -22,7 +22,16 @@ public class LocationDTO {
         city = location.getCity();
         country = location.getCountry();
         gps = location.getGps();
-        eventsSet = location.getEventsSet().stream().map(EventDTO::new).collect(Collectors.toSet());
+        eventsSet = location.getEventsSet().stream().map(event -> new EventDTO(
+                        event.getTitle(),
+                        event.getOrganizer(),
+                        event.getDescription(),
+                        event.getDate(),
+                        event.getTime(),
+                        event.getRating(),
+                        event.isActivated(),
+                        event.isExpired()))
+                .collect(Collectors.toSet());
     }
 
     public String getName() {

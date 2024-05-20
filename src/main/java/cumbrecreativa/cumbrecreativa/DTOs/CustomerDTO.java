@@ -24,6 +24,19 @@ public class CustomerDTO {
     public CustomerDTO() {
     }
 
+    public CustomerDTO(String name, String lastName, String userName, LocalDate birthdate,
+                       Gender gender, Rol rol, boolean isActivate, String email, String verification) {
+        this.name = name;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.rol = rol;
+        this.isActivate = isActivate;
+        this.email = email;
+        this.verification = verification;
+    }
+
     public CustomerDTO(Customer customer) {
         name = customer.getName();
         lastName = customer.getLastName();

@@ -33,8 +33,8 @@ public class CumbrecreativaApplication {
 //            eventRepository.save(testEvent);
 //            Assistance testAssistance = new Assistance();
 //            assistanceRepository.save(testAssistance);
-            Comment testComment = new Comment("testText", LocalDate.now());
-            commentRepository.save(testComment);
+//            Comment testComment = new Comment("testText", LocalDate.now());
+//            commentRepository.save(testComment);
             Location testLocation = new Location("testName", "testAddress", "testCity", "testCountry", "testGPS");
             locationRepository.save(testLocation);
 //            Rating testRating = new Rating((byte) 4, LocalDate.now());

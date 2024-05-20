@@ -17,9 +17,28 @@ public class RatingDTO {
     public RatingDTO(Rating ratingdto) {
         rating = ratingdto.getRating();
         date = ratingdto.getDate();
-        userRating = new CustomerDTO(ratingdto.getUserRating());
-        eventRating = new EventDTO(ratingdto.getEventRating());
-        comment = new CommentDTO(ratingdto.getComment());
+        userRating = new CustomerDTO(
+                ratingdto.getUserRating().getName(),
+                ratingdto.getUserRating().getLastName(),
+                ratingdto.getUserRating().getUserName(),
+                ratingdto.getUserRating().getBirthdate(),
+                ratingdto.getUserRating().getGender(),
+                ratingdto.getUserRating().getRol(),
+                ratingdto.getUserRating().isActivate(),
+                ratingdto.getUserRating().getEmail(),
+                ratingdto.getUserRating().getVerification());
+        eventRating = new EventDTO(
+                ratingdto.getEventRating().getTitle(),
+                ratingdto.getEventRating().getOrganizer(),
+                ratingdto.getEventRating().getDescription(),
+                ratingdto.getEventRating().getDate(),
+                ratingdto.getEventRating().getTime(),
+                ratingdto.getEventRating().getRating(),
+                ratingdto.getEventRating().isActivated(),
+                ratingdto.getEventRating().isExpired());
+        comment = new CommentDTO(
+                ratingdto.getComment().getText(),
+                ratingdto.getComment().getDate());
     }
 
     public Byte getRating() {

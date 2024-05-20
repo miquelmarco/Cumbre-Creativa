@@ -14,11 +14,33 @@ public class CommentDTO {
     public CommentDTO() {
     }
 
+    public CommentDTO(String text, LocalDate date) {
+        this.text = text;
+        this.date = date;
+    }
+
     public CommentDTO(Comment comment) {
         text = comment.getText();
         date = comment.getDate();
-        userComment = new CustomerDTO(comment.getUserComment());
-        eventComment = new EventDTO(comment.getEventComment());
+        userComment = new CustomerDTO(
+                comment.getUserComment().getName(),
+                comment.getUserComment().getLastName(),
+                comment.getUserComment().getUserName(),
+                comment.getUserComment().getBirthdate(),
+                comment.getUserComment().getGender(),
+                comment.getUserComment().getRol(),
+                comment.getUserComment().isActivate(),
+                comment.getUserComment().getEmail(),
+                comment.getUserComment().getVerification());
+        eventComment = new EventDTO(
+                comment.getEventComment().getTitle(),
+                comment.getEventComment().getOrganizer(),
+                comment.getEventComment().getDescription(),
+                comment.getEventComment().getDate(),
+                comment.getEventComment().getTime(),
+                comment.getEventComment().getRating(),
+                comment.getEventComment().isActivated(),
+                comment.getEventComment().isExpired());
         rating = new RatingDTO(comment.getRating());
     }
 

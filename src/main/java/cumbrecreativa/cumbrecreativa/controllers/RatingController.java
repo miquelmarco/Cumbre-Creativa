@@ -75,7 +75,10 @@ public class RatingController {
             }
 
             Comment comment = new Comment(textComment, LocalDate.now());
+            commentService.save(comment);
             Rating newRating = new Rating(rating, LocalDate.now(), customer, event);
+            ratingService.save(newRating);
+
             comment.setRating(newRating);
             newRating.setComment(comment);
             commentService.save(comment);

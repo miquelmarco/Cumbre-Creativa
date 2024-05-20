@@ -18,8 +18,25 @@ public class AssistanceDTO {
         isActive = assistance.isActive();
         isCancel = assistance.isCancel();
         confirmationCode = assistance.getConfirmationCode();
-        userAssistance = new CustomerDTO(assistance.getUserAssistance());
-        eventAssistance = new EventDTO(assistance.getEventAssistance());
+        userAssistance = new CustomerDTO(
+                assistance.getUserAssistance().getName(),
+                assistance.getUserAssistance().getLastName(),
+                assistance.getUserAssistance().getUserName(),
+                assistance.getUserAssistance().getBirthdate(),
+                assistance.getUserAssistance().getGender(),
+                assistance.getUserAssistance().getRol(),
+                assistance.getUserAssistance().isActivate(),
+                assistance.getUserAssistance().getEmail(),
+                assistance.getUserAssistance().getVerification());
+        eventAssistance = new EventDTO(
+                assistance.getEventAssistance().getTitle(),
+                assistance.getEventAssistance().getOrganizer(),
+                assistance.getEventAssistance().getDescription(),
+                assistance.getEventAssistance().getDate(),
+                assistance.getEventAssistance().getTime(),
+                assistance.getEventAssistance().getRating(),
+                assistance.getEventAssistance().isActivated(),
+                assistance.getEventAssistance().isExpired());
     }
 
     public Byte getCompanion() {

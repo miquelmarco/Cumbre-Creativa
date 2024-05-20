@@ -25,6 +25,17 @@ public class EventDTO {
     public EventDTO() {
     }
 
+    public EventDTO(String title, String organizer, String description, LocalDate date, LocalTime time, Byte rating, boolean isActivated, boolean isExpired) {
+        this.title = title;
+        this.organizer = organizer;
+        this.description = description;
+        this.date = date;
+        this.time = time;
+        this.rating = rating;
+        this.isActivated = isActivated;
+        this.isExpired = isExpired;
+    }
+
     public EventDTO(Event event) {
         title = event.getTitle();
         organizer = event.getOrganizer();
@@ -34,7 +45,16 @@ public class EventDTO {
         rating = event.getRating();
         isActivated = event.isActivated();
         isExpired = event.isExpired();
-        userEvent = new CustomerDTO(event.getUserEvent());
+        userEvent = new CustomerDTO(
+                event.getUserEvent().getName(),
+                event.getUserEvent().getLastName(),
+                event.getUserEvent().getUserName(),
+                event.getUserEvent().getBirthdate(),
+                event.getUserEvent().getGender(),
+                event.getUserEvent().getRol(),
+                event.getUserEvent().isActivate(),
+                event.getUserEvent().getEmail(),
+                event.getUserEvent().getVerification());
         location = new LocationDTO(event.getLocation());
         commentSet = event.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
         assistanceSet = event.getAssistanceSet().stream().map(AssistanceDTO::new).collect(Collectors.toSet());
