@@ -16,7 +16,9 @@ public class Event {
     private Long id;
     private String title;
     private String organizer;
+    @Column(length = 1000)
     private String description;
+    @Column(length = 1000)
     private String img;
     private LocalDate date;
     private LocalTime time;

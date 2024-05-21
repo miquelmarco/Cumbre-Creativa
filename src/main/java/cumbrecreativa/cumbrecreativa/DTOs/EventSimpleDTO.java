@@ -1,13 +1,11 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
-import cumbrecreativa.cumbrecreativa.models.*;
+import cumbrecreativa.cumbrecreativa.models.Event;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class EventDTO {
+public class EventSimpleDTO {
     private Long id;
     private String title;
     private String organizer;
@@ -18,16 +16,11 @@ public class EventDTO {
     private Byte rating;
     private boolean isActivated;
     private boolean isExpired;
-    private CustomerSimpleDTO userEvent;
-    private LocationDTO location;
-    private Set<CommentDTO> commentSet;
-    private Set<AssistanceDTO> assistanceSet;
-    private Set<RatingDTO> ratingSet;
 
-    public EventDTO() {
+    public EventSimpleDTO() {
     }
 
-    public EventDTO(Event event) {
+    public EventSimpleDTO(Event event) {
         id = event.getId();
         title = event.getTitle();
         organizer = event.getOrganizer();
@@ -38,11 +31,6 @@ public class EventDTO {
         rating = event.getRating();
         isActivated = event.isActivated();
         isExpired = event.isExpired();
-        userEvent = new CustomerSimpleDTO(event.getUserEvent());
-        location = new LocationDTO(event.getLocation());
-        commentSet = event.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
-        assistanceSet = event.getAssistanceSet().stream().map(AssistanceDTO::new).collect(Collectors.toSet());
-        ratingSet = event.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -83,25 +71,5 @@ public class EventDTO {
 
     public boolean isExpired() {
         return isExpired;
-    }
-
-    public CustomerSimpleDTO getUserEvent() {
-        return userEvent;
-    }
-
-    public LocationDTO getLocation() {
-        return location;
-    }
-
-    public Set<CommentDTO> getCommentSet() {
-        return commentSet;
-    }
-
-    public Set<AssistanceDTO> getAssistanceSet() {
-        return assistanceSet;
-    }
-
-    public Set<RatingDTO> getRatingSet() {
-        return ratingSet;
     }
 }

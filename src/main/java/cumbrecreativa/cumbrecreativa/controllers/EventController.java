@@ -60,7 +60,7 @@ public class EventController {
         if (location == null) {
             return new ResponseEntity<>("Locación no válida", HttpStatus.FORBIDDEN);
         }
-        Event newEvent = new Event(eCreator.getTitle(), customer.getUserName(), eCreator.getDescription(), eCreator.getDate(), eCreator.getTime(), (byte) 0, true);
+        Event newEvent = new Event(eCreator.getTitle(), customer.getUserName(), eCreator.getDescription(), eCreator.getImg(), eCreator.getDate(), eCreator.getTime(), (byte) 0, true);
         customer.addEvent(newEvent);
         location.addEvent(newEvent);
         customerService.save(customer);

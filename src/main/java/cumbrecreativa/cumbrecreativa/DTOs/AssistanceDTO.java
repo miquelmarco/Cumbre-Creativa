@@ -3,41 +3,27 @@ package cumbrecreativa.cumbrecreativa.DTOs;
 import cumbrecreativa.cumbrecreativa.models.Assistance;
 
 public class AssistanceDTO {
+    private Long id;
     private Byte companion;
     private boolean isActive;
     private boolean isCancel;
-    private String confirmationCode;
-    private CustomerDTO userAssistance;
-    private EventDTO eventAssistance;
+    private CustomerSimpleDTO userAssistance;
+    private EventSimpleDTO eventAssistance;
 
     public AssistanceDTO() {
     }
 
     public AssistanceDTO(Assistance assistance) {
+        id = assistance.getId();
         companion = assistance.getCompanion();
         isActive = assistance.isActive();
         isCancel = assistance.isCancel();
-        confirmationCode = assistance.getConfirmationCode();
-        userAssistance = new CustomerDTO(
-                assistance.getUserAssistance().getName(),
-                assistance.getUserAssistance().getLastName(),
-                assistance.getUserAssistance().getUserName(),
-                assistance.getUserAssistance().getBirthdate(),
-                assistance.getUserAssistance().getGender(),
-                assistance.getUserAssistance().getRol(),
-                assistance.getUserAssistance().isActivate(),
-                assistance.getUserAssistance().getEmail(),
-                assistance.getUserAssistance().getVerification());
-        eventAssistance = new EventDTO(
-                assistance.getEventAssistance().getTitle(),
-                assistance.getEventAssistance().getOrganizer(),
-                assistance.getEventAssistance().getDescription(),
-                assistance.getEventAssistance().getImg(),
-                assistance.getEventAssistance().getDate(),
-                assistance.getEventAssistance().getTime(),
-                assistance.getEventAssistance().getRating(),
-                assistance.getEventAssistance().isActivated(),
-                assistance.getEventAssistance().isExpired());
+        userAssistance = new CustomerSimpleDTO(assistance.getUserAssistance());
+        eventAssistance = new EventSimpleDTO(assistance.getEventAssistance());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Byte getCompanion() {
@@ -52,15 +38,11 @@ public class AssistanceDTO {
         return isCancel;
     }
 
-    public String getConfirmationCode() {
-        return confirmationCode;
-    }
-
-    public CustomerDTO getUserAssistance() {
+    public CustomerSimpleDTO getUserAssistance() {
         return userAssistance;
     }
 
-    public EventDTO getEventAssistance() {
+    public EventSimpleDTO getEventAssistance() {
         return eventAssistance;
     }
 }

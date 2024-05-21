@@ -9,6 +9,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 1000)
     private String text;
     private LocalDate date;
     @ManyToOne(fetch = FetchType.EAGER)

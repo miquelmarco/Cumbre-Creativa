@@ -6,33 +6,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LocationDTO {
+    private Long id;
     private String name;
     private String address;
     private String city;
     private String country;
     private String gps;
-    private Set<EventDTO> eventsSet;
+    private Set<EventSimpleDTO> eventsSet;
 
     public LocationDTO() {
     }
 
     public LocationDTO(Location location) {
+        id = location.getId();
         name = location.getName();
         address = location.getAddress();
         city = location.getCity();
         country = location.getCountry();
         gps = location.getGps();
-        eventsSet = location.getEventsSet().stream().map(event -> new EventDTO(
-                        event.getTitle(),
-                        event.getOrganizer(),
-                        event.getDescription(),
-                        event.getImg(),
-                        event.getDate(),
-                        event.getTime(),
-                        event.getRating(),
-                        event.isActivated(),
-                        event.isExpired()))
-                .collect(Collectors.toSet());
+        eventsSet = location.getEventsSet().stream().map(EventSimpleDTO::new).collect(Collectors.toSet());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -55,7 +51,7 @@ public class LocationDTO {
         return gps;
     }
 
-    public Set<EventDTO> getEventsSet() {
+    public Set<EventSimpleDTO> getEventsSet() {
         return eventsSet;
     }
 }

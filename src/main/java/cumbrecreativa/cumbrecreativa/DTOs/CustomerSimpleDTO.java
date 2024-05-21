@@ -1,12 +1,12 @@
 package cumbrecreativa.cumbrecreativa.DTOs;
 
-import cumbrecreativa.cumbrecreativa.models.*;
+import cumbrecreativa.cumbrecreativa.models.Customer;
+import cumbrecreativa.cumbrecreativa.models.Gender;
+import cumbrecreativa.cumbrecreativa.models.Rol;
 
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class CustomerDTO {
+public class CustomerSimpleDTO {
     private Long id;
     private String name;
     private String lastName;
@@ -16,15 +16,11 @@ public class CustomerDTO {
     private Rol rol;
     private boolean isActivate;
     private String email;
-    private Set<EventDTO> eventSet;
-    private Set<CommentDTO> commentSet;
-    private Set<RatingDTO> ratingSet;
-    private Set<AssistanceDTO> assistanceSet;
 
-    public CustomerDTO() {
+    public CustomerSimpleDTO() {
     }
 
-    public CustomerDTO(Customer customer) {
+    public CustomerSimpleDTO(Customer customer) {
         id = customer.getId();
         name = customer.getName();
         lastName = customer.getLastName();
@@ -34,10 +30,6 @@ public class CustomerDTO {
         rol = customer.getRol();
         isActivate = customer.isActivate();
         email = customer.getEmail();
-        eventSet = customer.getEventSet().stream().map(EventDTO::new).collect(Collectors.toSet());
-        commentSet = customer.getCommentSet().stream().map(CommentDTO::new).collect(Collectors.toSet());
-        ratingSet = customer.getRatingSet().stream().map(RatingDTO::new).collect(Collectors.toSet());
-        assistanceSet = customer.getAssistanceSet().stream().map(AssistanceDTO::new).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -74,21 +66,5 @@ public class CustomerDTO {
 
     public String getEmail() {
         return email;
-    }
-
-    public Set<EventDTO> getEventSet() {
-        return eventSet;
-    }
-
-    public Set<CommentDTO> getCommentSet() {
-        return commentSet;
-    }
-
-    public Set<RatingDTO> getRatingSet() {
-        return ratingSet;
-    }
-
-    public Set<AssistanceDTO> getAssistanceSet() {
-        return assistanceSet;
     }
 }

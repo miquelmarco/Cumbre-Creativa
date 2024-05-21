@@ -5,44 +5,27 @@ import cumbrecreativa.cumbrecreativa.models.Comment;
 import java.time.LocalDate;
 
 public class CommentDTO {
+    private Long id;
     private String text;
     private LocalDate date;
-    private CustomerDTO userComment;
-    private EventDTO eventComment;
-    private RatingDTO rating;
+    private CustomerSimpleDTO userComment;
+    private EventSimpleDTO eventComment;
+    private RatingSimpleDTO rating;
 
     public CommentDTO() {
     }
 
-    public CommentDTO(String text, LocalDate date) {
-        this.text = text;
-        this.date = date;
-    }
-
     public CommentDTO(Comment comment) {
+        id = comment.getId();
         text = comment.getText();
         date = comment.getDate();
-        userComment = new CustomerDTO(
-                comment.getUserComment().getName(),
-                comment.getUserComment().getLastName(),
-                comment.getUserComment().getUserName(),
-                comment.getUserComment().getBirthdate(),
-                comment.getUserComment().getGender(),
-                comment.getUserComment().getRol(),
-                comment.getUserComment().isActivate(),
-                comment.getUserComment().getEmail(),
-                comment.getUserComment().getVerification());
-        eventComment = new EventDTO(
-                comment.getEventComment().getTitle(),
-                comment.getEventComment().getOrganizer(),
-                comment.getEventComment().getDescription(),
-                comment.getEventComment().getImg(),
-                comment.getEventComment().getDate(),
-                comment.getEventComment().getTime(),
-                comment.getEventComment().getRating(),
-                comment.getEventComment().isActivated(),
-                comment.getEventComment().isExpired());
-        rating = new RatingDTO(comment.getRating());
+        userComment = new CustomerSimpleDTO(comment.getUserComment());
+        eventComment = new EventSimpleDTO(comment.getEventComment());
+        rating = new RatingSimpleDTO(comment.getRating());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getText() {
@@ -53,15 +36,15 @@ public class CommentDTO {
         return date;
     }
 
-    public CustomerDTO getUserComment() {
+    public CustomerSimpleDTO getUserComment() {
         return userComment;
     }
 
-    public EventDTO getEventComment() {
+    public EventSimpleDTO getEventComment() {
         return eventComment;
     }
 
-    public RatingDTO getRating() {
+    public RatingSimpleDTO getRating() {
         return rating;
     }
 }
