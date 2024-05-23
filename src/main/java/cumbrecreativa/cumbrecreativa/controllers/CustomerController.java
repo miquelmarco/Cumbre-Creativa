@@ -29,7 +29,7 @@ public class CustomerController {
     private EmailService emailService;
 
     @GetMapping("/getAllCustomers")
-    private ResponseEntity<?> getAllCustomers(Authentication authentication) {
+    public ResponseEntity<?> getAllCustomers(Authentication authentication) {
         Customer customer = customerService.findByEmail(authentication.getName());
         if (customer == null || customer.getRol() != Rol.ADMIN) {
             return new ResponseEntity<>("Acceso denegado", HttpStatus.FORBIDDEN);
@@ -38,8 +38,21 @@ public class CustomerController {
         return new ResponseEntity<>(customerDTOSet, HttpStatus.OK);
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrent(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return new ResponseEntity<>("Usuario no autenticado", HttpStatus.UNAUTHORIZED);
+        }
+        Customer customer = customerService.findByEmail(authentication.getName());
+        if (customer == null) {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        CustomerDTO customerDTO = new CustomerDTO(customer);
+        return new ResponseEntity<>(customerDTO, HttpStatus.OK);
+    }
+
     @PostMapping("/register")
-    private ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
         if (registerDTO.getName().isBlank()) {
             return new ResponseEntity<>("Debe ingresar un nombre", HttpStatus.FORBIDDEN);
         }
@@ -91,6 +104,7 @@ public class CustomerController {
         emailService.sendVerificationMail(newCustomer.getEmail(), verCode);
         return new ResponseEntity<>("Registro completo, verifica tu cuenta", HttpStatus.OK);
     }
+
     @GetMapping("/verifyMail/{code}")
     public ResponseEntity<?> verifyAccount(@PathVariable String code) {
         Customer customer = customerService.findByVerification(code);
@@ -99,10 +113,11 @@ public class CustomerController {
         }
         customer.setActivate(true);
         customerService.save(customer);
-        return  new ResponseEntity<>("Verificación correcta", HttpStatus.OK);
+        return new ResponseEntity<>("Verificación correcta", HttpStatus.OK);
     }
+
     @PostMapping("/forgotPassword")
-    public ResponseEntity<?> forgotPassword (@RequestParam String email) {
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
         Customer customer = customerService.findByEmail(email);
         if (customer == null) {
             return new ResponseEntity<>("No se encontró el usuario", HttpStatus.NOT_FOUND);
@@ -114,10 +129,11 @@ public class CustomerController {
         emailService.passwordRecovery(customer.getEmail(), token);
         return new ResponseEntity<>("Correo de restablecimiento enviado", HttpStatus.OK);
     }
+
     @PostMapping("/resetPassword/{token}")
-    public ResponseEntity<?> resetPassword (@PathVariable String token, @RequestParam String newPassword) {
+    public ResponseEntity<?> resetPassword(@PathVariable String token, @RequestParam String newPassword) {
         Customer customer = customerService.findByResetPasswordToken(token);
-        if (customer ==  null || customer.getResetPasswordExpiration().isBefore(LocalDateTime.now())) {
+        if (customer == null || customer.getResetPasswordExpiration().isBefore(LocalDateTime.now())) {
             return new ResponseEntity<>("Enlace inválido o caducado", HttpStatus.FORBIDDEN);
         }
         customer.setPassword(passwordEncoder.encode(newPassword));
