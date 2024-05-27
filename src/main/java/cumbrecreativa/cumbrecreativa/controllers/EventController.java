@@ -3,6 +3,7 @@ package cumbrecreativa.cumbrecreativa.controllers;
 import cumbrecreativa.cumbrecreativa.DTOs.EventCreatorDTO;
 import cumbrecreativa.cumbrecreativa.DTOs.EventDTO;
 import cumbrecreativa.cumbrecreativa.DTOs.EventEditorDTO;
+import cumbrecreativa.cumbrecreativa.DTOs.EventSimpleDTO;
 import cumbrecreativa.cumbrecreativa.models.Customer;
 import cumbrecreativa.cumbrecreativa.models.Event;
 import cumbrecreativa.cumbrecreativa.models.Location;
@@ -30,9 +31,18 @@ public class EventController {
     private LocationService locationService;
 
     @GetMapping("/getAllEvents")
-    private ResponseEntity<?> getAllEvents() {
+    public ResponseEntity<?> getAllEvents() {
         Set<EventDTO> eventDTOSet = eventService.findAll();
         return new ResponseEntity<>(eventDTOSet, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEvent/{id}")
+    public ResponseEntity<?> getEventById(@PathVariable Long id) {
+        if (id.toString().isBlank()) {
+            return new ResponseEntity<>("Falta información", HttpStatus.EXPECTATION_FAILED);
+        }
+        EventSimpleDTO event = new EventSimpleDTO(eventService.findById(id));
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PostMapping("/newEvent")

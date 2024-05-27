@@ -12,7 +12,7 @@ public class LocationDTO {
     private String city;
     private String country;
     private String gps;
-    private Set<EventSimpleDTO> eventsSet;
+//    private Set<EventSimpleDTO> eventsSet;
 
     public LocationDTO() {
     }
@@ -24,7 +24,7 @@ public class LocationDTO {
         city = location.getCity();
         country = location.getCountry();
         gps = location.getGps();
-        eventsSet = location.getEventsSet().stream().map(EventSimpleDTO::new).collect(Collectors.toSet());
+//        eventsSet = location.getEventsSet().stream().map(EventSimpleDTO::new).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -51,7 +51,7 @@ public class LocationDTO {
         return gps;
     }
 
-    public Set<EventSimpleDTO> getEventsSet() {
-        return eventsSet;
-    }
+//    public Set<EventSimpleDTO> getEventsSet() {
+//        return eventsSet;
+//    }
 }

@@ -1,8 +1,8 @@
 * {
-    border: 0;
-    margin: 0;
-    box-sizing: border-box;
-    border: solid red 1px;
+    border: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    border: solid red 1px !important;
 }
 
 .color1 {
@@ -45,6 +45,9 @@
 
 body {
     min-height: 100%;
+    background-image: url(../images/backgroundConcert.jpg);
+    background-position: center;
+    background-size: cover;
 }
 
 header {
@@ -56,5 +59,5 @@ main {
 }
 
 footer {
-    min-height: 15vh;
+    min-height: 50vh;
 }

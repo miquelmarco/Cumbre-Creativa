@@ -8,19 +8,15 @@
 .color1 {
     color: #02315E;
 }
-
 .color2 {
     color: #00457E;
 }
-
 .color3 {
     color: #2F70AF;
 }
-
 .color4 {
     color: #B9848C;
 }
-
 .color5 {
     color: #806491;
 }
@@ -39,6 +35,8 @@
 
 .font4 {
     font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
 }
 
 #app {
@@ -141,72 +139,29 @@ footer {
 
 /* main edit */
 
-.mainContainer {
-    min-height: 70vh;
+.imgContainer {
+    width: 50vw;
+    height: 40vh;
 }
 
-.mainTitle {
-    color: white;
-    font-weight: 600;
-    text-align: center;
-    text-shadow: 1px 1px 0 #806491, 2px 2px 0 #00457E;
-}
-
-.inputSearch {
-    font-family: "Rajdhani", sans-serif;
-    height: 2.5rem;
-    min-width: 15rem;
-    border: solid #00457E 3px;
-    font-weight: 700;
-    color: #00457E;
-}
-
-.eventCard {
-    width: 30rem;
-    height: 20rem;
-    background-color: #b9848c3b;
-    border: #00457E solid 0.1px !important;
-}
-
-.cardImg {
+.detailImg {
     width: 100%;
-    height: 50%;
+    height: 100%;
     object-fit: contain;
-    padding: 0.3rem;
 }
 
-.cardTitle {
-    font-family: "Rajdhani", sans-serif;
-    font-size: larger;
-    font-weight: 500;
+.detailTitle {
     color: white;
-    background-color: #00457ea5;
+    background-color: #00457ee2;
+    padding: 1rem;
+    font-size: 2rem;
+    border: solid #806491 3px !important;
 }
 
-.cardDetailBtn {
-    padding: 0.5rem;
-    min-width: 10rem;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    font-family: "Rajdhani", sans-serif;
+.detailDescription {
     font-size: larger;
     font-weight: 700;
-    background-color: #00457eb8;
-    transition: 0.2s;
-}
-
-.cardDetailBtn:hover {
-    color: #00457E;
-    background-color: #B9848C;
-    transition: 0.2s;
-}
-
-.valText {
-    color: #00457E;
-    margin-left: 0.5rem !important;
-}
-
-.cardTransition {
-    filter: opacity(0.5);
+    text-align: center;
+    color: rgb(78, 18, 18);
+    background-color: #b9848cd3;
 }

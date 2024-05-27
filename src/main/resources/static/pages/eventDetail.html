@@ -16,19 +16,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/styles/index.css">
-    <link rel="shortcut icon" href="./assets/images/logoFaviconNoBg.png" type="image/x-icon">
-    <title>Cumbre Creativa || Inicio</title>
+    <link rel="stylesheet" href="../assets/styles/eventDetail.css">
+    <link rel="shortcut icon" href="../assets/images/logoFaviconNoBg.png" type="image/x-icon">
+    <title>Cumbre Creativa || Detalles</title>
 </head>
 
 <body>
     <div id="app">
-        {{filter}}
         <header>
             <div class="headerContainer d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-center align-items-center">
                     <a href="#">
-                        <img class="navLogo h-100 m-2" src="./assets/images/logoFavicon.png" alt="logo">
+                        <img class="navLogo h-100 m-2" src="../assets/images/logoFavicon.png" alt="logo">
                     </a>
                     <div class="mx-2">
                         <h2 class="navTitle font3">Cumbre Creativa</h2>
@@ -36,40 +35,21 @@
                     </div>
                 </div>
                 <div class="navContainer d-flex justify-content-end align-items-center gap-2">
-                    <a class="navAnchor" href="#">Inicio</a>
+                    <a class="navAnchor" href="../index.html">Inicio</a>
                     <a class="navAnchor" href="#">Calendario</a>
                     <a class="navAnchor" href="#">Mi Perfil</a>
                     <a class="navAnchor" href="#">Acerca de Nosotros</a>
                 </div>
             </div>
         </header>
-        <main>
-            <div class="mainContainer d-flex flex-column align-items-center">
-                <div class="d-flex justify-content-center align-items-center m-3 w-75 gap-3">
-                    <h5 class="mainTitle font3 fs-3 m-2">¡Explora los mejores eventos para ti o regístrate como
-                        organizador y diseña tus propias actividades!</h5>
-                    <input class="inputSearch" type="search" name="search" id="search" placeholder="  busca tu evento"
-                        v-model="searchInput">
-                </div>
-                <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-                    <div class="eventCard d-flex flex-column justify-content-between" v-for="event of events">
-                        <img class="cardImg" :src="event.img" alt="imgCover">
-                        <p class="cardTitle text-center">{{event.title}}</p>
-                        <div class="d-flex justify-content-between m-1">
-                            <div class="valText d-flex flex-column justify-content-center align-items-center">
-                                <!-- <p class="m-0">Valoración {{event.rating}}/5<i class="bi bi-star-fill mx-1"></i></p> -->
-                                <p>Valoración {{event.rating}}/5</p>
-                                <p v-html="starRating(event.rating)"></p>
-                            </div>
-                            <a :href="`./pages/eventDetail.html?id=${event.id}`"><button
-                                    class="cardDetailBtn m-1">Detalles</button></a>
-                        </div>
-                    </div>
-                </div>
+        <main class="d-flex align-items-center flex-column gap-3">
+            <div class="imgContainer p-3">
+                <img :src="eventObj.img" alt="cover" class="detailImg">
             </div>
+            <p class="detailTitle">{{eventObj.title.toUpperCase()}}</p>
+            <p class="detailDescription w-75">{{eventObj.description}}</p>
         </main>
-        <footer>
-        </footer>
+        <footer></footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -77,7 +57,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="./assets/scripts/index.js"></script>
+    <script src="../assets/scripts/eventDetail.js"></script>
 </body>
 
 </html>
